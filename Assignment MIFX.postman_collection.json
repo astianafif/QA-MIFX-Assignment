@@ -18,7 +18,9 @@
 							"const status = pm.response.status;\r",
 							"\r",
 							"pm.test(\"Status code: \" + code + \" \" + status)\r",
-							"pm.test(\"Response time: \" + responseTime + \"ms\")\r",
+							"pm.test(\"Response time: \" + responseTime + \"ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(150);\r",
+							"});\r",
 							"pm.test(\"Pagination detail is correct\", function () {\r",
 							"    const jsonData = pm.response.json();\r",
 							"    pm.expect(jsonData.page).to.eql(2);\r",
@@ -38,16 +40,33 @@
 							"pm.test(\"Check mail format\", function () {\r",
 							"    const jsonData = pm.response.json();\r",
 							"    jsonData.data.forEach((user) => {\r",
-							"        pm.expect(user.email).to.include(\"@\"); // Basic email check\r",
+							"        pm.expect(user.email).to.include(\"@\");\r",
 							"    });\r",
 							"});\r",
-							"pm.test(\"Specific user check\", function () {\r",
+							"pm.test(\"Verify specific data\", function () {\r",
 							"    var jsonData = pm.response.json();\r",
 							"    var user = jsonData.data.find(u => u.first_name === \"Lindsay\");\r",
 							"    \r",
 							"    pm.expect(user).to.not.be.undefined;\r",
 							"    pm.expect(user.last_name).to.eql(\"Ferguson\");\r",
+							"});\r",
+							"pm.test(\"Verify specific data (Invalid)\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var user = jsonData.data.find(u => u.first_name === \"Alex\");\r",
+							"    \r",
+							"    pm.expect(user).to.be.undefined;\r",
 							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
 						],
 						"type": "text/javascript",
 						"packages": {},
@@ -126,7 +145,7 @@
 					},
 					"status": "OK",
 					"code": 200,
-					"_postman_previewlanguage": "",
+					"_postman_previewlanguage": null,
 					"header": [
 						{
 							"key": "Date",
